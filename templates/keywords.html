@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}KEYWORDS{% endblock %}
+
+{% block content %}
+<h1>KEYWORDS & REPLY TEMPLATES</h1>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">ADD KEYWORD</div>
+    <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 12px; align-items: end;">
+            <div>
+                <label for="category" class="form-label">CATEGORY</label>
+                <select class="form-control" id="category" name="category" required>
+                    {% for cat in keywords.keys() %}
+                    <option value="{{ cat }}">{{ cat|upper }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="keyword" class="form-label">KEYWORD OR SENTENCE</label>
+                <input type="text" class="form-control" id="keyword" name="keyword" required placeholder="ENTER KEYWORD OR SENTENCE TO MONITOR">
+            </div>
+            <button type="submit" class="btn btn-primary">ADD</button>
+        </div>
+    </form>
+</div>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">ADD CATEGORY</div>
+    <form method="POST">
+        <input type="hidden" name="action" value="add_category">
+        <div style="display: grid; grid-template-columns: 2fr auto; gap: 12px; align-items: end;">
+            <div>
+                <label for="new_category" class="form-label">CATEGORY NAME</label>
+                <input type="text" class="form-control" id="new_category" name="new_category" required placeholder="E.G., REAL_ESTATE">
+            </div>
+            <button type="submit" class="btn btn-primary">ADD CATEGORY</button>
+        </div>
+    </form>
+</div>
+
+{% for category, keyword_list in keywords.items() %}
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">{{ category|upper }} - KEYWORDS ({{ keyword_list|length }})</div>
+    {% if keyword_list %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+        {% for keyword in keyword_list %}
+        <div style="background: #FFFFFF; border: 4px solid #000000; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; color: #000000; font-weight: 700;">{{ keyword|upper }}</span>
+            <form method="POST" style="margin: 0; display: inline;">
+                <input type="hidden" name="action" value="remove">
+                <input type="hidden" name="category" value="{{ category }}">
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <button type="submit" class="btn" style="padding: 4px 8px; font-size: 11px;">REMOVE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: #000000; font-size: 12px; margin-bottom: 16px; font-weight: 700; text-transform: uppercase;">NO KEYWORDS IN THIS CATEGORY</p>
+    {% endif %}
+    
+    <div style="border-top: 4px solid #000000; padding-top: 16px; margin-top: 16px;">
+        <div class="card-header" style="margin-bottom: 12px; padding-bottom: 8px;">REPLY TEMPLATES FOR {{ category|upper }} ({{ reply_templates.get(category, [])|length }})</div>
+        
+        <form method="POST" style="margin-bottom: 12px;">
+            <input type="hidden" name="action" value="add_reply">
+            <input type="hidden" name="category" value="{{ category }}">
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end;">
+                <div>
+                    <label for="reply_text_{{ category }}" class="form-label">REPLY TEMPLATE</label>
+                    <textarea class="form-control" id="reply_text_{{ category }}" name="reply_text" rows="2" required placeholder="ENTER REPLY TEMPLATE FOR THIS CATEGORY..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">ADD REPLY</button>
+            </div>
+        </form>
+        
+        {% if reply_templates.get(category) %}
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            {% for reply in reply_templates.get(category, []) %}
+            <div style="background: #FFFFFF; border: 4px solid #000000; padding: 12px; display: flex; justify-content: space-between; align-items: start; gap: 12px;">
+                <p style="color: #000000; line-height: 1.4; margin: 0; font-size: 12px; flex: 1; font-weight: 700;">{{ reply|upper }}</p>
+                <form method="POST" style="margin: 0;">
+                    <input type="hidden" name="action" value="remove_reply">
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <input type="hidden" name="reply_index" value="{{ loop.index0 }}">
+                    <button type="submit" class="btn" style="padding: 4px 8px; font-size: 11px;">REMOVE</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color: #000000; font-size: 12px; font-weight: 700; text-transform: uppercase;">NO REPLY TEMPLATES FOR THIS CATEGORY</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}TWEETS{% endblock %}
+
+{% block content %}
+<h1>TWEET MANAGEMENT</h1>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">SCHEDULE TWEET</div>
+    <form method="POST">
+        <input type="hidden" name="action" value="schedule">
+        <div style="margin-bottom: 12px;">
+            <label for="tweet_text" class="form-label">TWEET TEXT (MAX 280 CHARACTERS)</label>
+            <textarea class="form-control" id="tweet_text" name="tweet_text" rows="4" required placeholder="ENTER YOUR TWEET HERE..."></textarea>
+            <small style="color: #000000; font-size: 11px; display: block; margin-top: 4px; font-weight: 700;">
+                <span id="char-count">0</span> / 280 CHARACTERS
+            </small>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            <div>
+                <label for="schedule_date" class="form-label">DATE</label>
+                <input type="date" class="form-control" id="schedule_date" name="schedule_date" required>
+            </div>
+            <div>
+                <label for="schedule_time" class="form-label">TIME (24-HOUR FORMAT)</label>
+                <input type="time" class="form-control" id="schedule_time" name="schedule_time" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            SCHEDULE TWEET
+        </button>
+    </form>
+</div>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">ADD TO QUEUE (RANDOM POSTING)</div>
+    <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div style="margin-bottom: 12px;">
+            <label for="queue_tweet_text" class="form-label">TWEET TEXT</label>
+            <textarea class="form-control" id="queue_tweet_text" name="tweet_text" rows="3" required placeholder="ENTER TWEET FOR RANDOM QUEUE..."></textarea>
+        </div>
+        <button type="submit" class="btn">
+            ADD TO QUEUE
+        </button>
+    </form>
+</div>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div class="card-header">SCHEDULED TWEETS ({{ scheduled_tweets|length }})</div>
+    {% if scheduled_tweets %}
+    <div style="display: flex; flex-direction: column; gap: 0;">
+        {% for scheduled in scheduled_tweets %}
+        <div style="border-bottom: 4px solid #000000; padding: 12px; display: flex; justify-content: space-between; align-items: start; gap: 12px;">
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="color: #000000; font-size: 11px; font-weight: 700; text-transform: uppercase;">{{ scheduled.datetime }}</span>
+                    <span class="status-badge {% if scheduled.status == 'pending' %}status-active{% else %}status-inactive{% endif %}" style="font-size: 10px;">
+                        {{ scheduled.status|upper }}
+                    </span>
+                </div>
+                <p style="color: #000000; line-height: 1.4; margin: 0; font-size: 12px; font-weight: 700;">{{ scheduled.tweet }}</p>
+            </div>
+            <form method="POST" style="margin: 0;">
+                <input type="hidden" name="action" value="remove_scheduled">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn" style="padding: 6px 10px; font-size: 11px;">REMOVE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: #000000; text-align: center; padding: 40px; font-weight: 700; text-transform: uppercase;">NO SCHEDULED TWEETS. SCHEDULE TWEETS ABOVE.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-header">TWEET QUEUE ({{ tweet_queue|length }} TWEETS)</div>
+    {% if tweet_queue %}
+    <div style="display: flex; flex-direction: column; gap: 0;">
+        {% for tweet in tweet_queue %}
+        <div style="border-bottom: 4px solid #000000; padding: 12px; display: flex; justify-content: space-between; align-items: start; gap: 12px;">
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="color: #000000; font-size: 11px; font-weight: 700; text-transform: uppercase;">#{{ loop.index }}</span>
+                    <span style="color: #000000; font-size: 11px; font-weight: 700;">{{ tweet|length }} CHARS</span>
+                    <span class="status-badge" style="background: #FFFF00; color: #000000; font-size: 10px; border: 2px solid #000000;">RANDOM QUEUE</span>
+                </div>
+                <p style="color: #000000; line-height: 1.4; margin: 0; font-size: 12px; font-weight: 700;">{{ tweet }}</p>
+            </div>
+            <form method="POST" style="margin: 0;">
+                <input type="hidden" name="action" value="remove">
+                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                <button type="submit" class="btn" style="padding: 6px 10px; font-size: 11px;">REMOVE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: #000000; text-align: center; padding: 40px; font-weight: 700; text-transform: uppercase;">NO TWEETS IN QUEUE. ADD TWEETS ABOVE FOR RANDOM POSTING.</p>
+    {% endif %}
+</div>
+
+<script>
+const tweetText = document.getElementById('tweet_text');
+const charCount = document.getElementById('char-count');
+
+if (tweetText && charCount) {
+    tweetText.addEventListener('input', function() {
+        const length = this.value.length;
+        charCount.textContent = length;
+        
+        if (length > 280) {
+            charCount.style.color = '#FF0000';
+        } else if (length > 250) {
+            charCount.style.color = '#FFFF00';
+        } else {
+            charCount.style.color = '#000000';
+        }
+    });
+}
+
+const dateInput = document.getElementById('schedule_date');
+if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+}
+</script>
+{% endblock %}

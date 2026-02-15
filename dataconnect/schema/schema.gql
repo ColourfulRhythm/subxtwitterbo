@@ -1,0 +1,47 @@
+type User @table {
+  username: String!
+  email: String!
+  createdAt: Timestamp!
+  fullName: String
+  profilePictureUrl: String
+}
+
+type TwitterAccount @table {
+  user: User!
+  twitterUserId: String!
+  twitterUsername: String!
+  accessToken: String!
+  tokenSecret: String!
+  createdAt: Timestamp!
+  profileImageUrl: String
+  accountName: String
+}
+
+type ScheduledTweet @table {
+  twitterAccount: TwitterAccount!
+  tweetText: String!
+  scheduledTime: Timestamp!
+  status: String!
+  createdAt: Timestamp!
+  mediaUrls: [String]
+  replyToTweetId: String
+}
+
+type AutoReplyRule @table {
+  twitterAccount: TwitterAccount!
+  keyword: String!
+  replyText: String!
+  isActive: Boolean!
+  createdAt: Timestamp!
+  caseSensitive: Boolean
+  matchExactPhrase: Boolean
+}
+
+type KeywordMonitor @table {
+  twitterAccount: TwitterAccount!
+  keyword: String!
+  isActive: Boolean!
+  createdAt: Timestamp!
+  languageFilter: String
+  locationFilter: String
+}

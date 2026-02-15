@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}DASHBOARD{% endblock %}
+
+{% block content %}
+<h1>DASHBOARD</h1>
+
+<div class="card" style="margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 40px; height: 40px; background: #000000; color: #FFFFFF; display: flex; align-items: center; justify-content: center; border: 4px solid #000000; font-weight: 700; font-size: 14px;">
+            {{ user.username[1] if user.username.startswith('@') else user.username[0] }}
+        </div>
+        <div>
+            <h2 style="margin: 0 0 4px 0; font-size: 16px;">{{ user.username|upper }}</h2>
+            <p style="color: #000000; font-size: 11px; font-weight: 700; text-transform: uppercase;">BOT CONTROL CENTER</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-4" style="margin-bottom: 16px;">
+    <div class="stat-card">
+        <div class="stat-number">{{ bot_data.get('total_tweets_posted', 0) }}</div>
+        <div class="stat-label">TOTAL TWEETS</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">{{ bot_data.get('total_replies_sent', 0) }}</div>
+        <div class="stat-label">TOTAL REPLIES</div>
+    </div>
+    
+    <div class="stat-card">
+        {% if bot_status.running %}
+            <div class="status-badge status-active">ACTIVE</div>
+        {% else %}
+            <div class="status-badge status-inactive">INACTIVE</div>
+        {% endif %}
+        <div class="stat-label" style="margin-top: 12px;">BOT STATUS</div>
+    </div>
+    
+    <div class="stat-card">
+        {% if user.twitter_connected %}
+            <div class="status-badge status-active">CONNECTED</div>
+        {% else %}
+            <div class="status-badge status-inactive">NOT CONNECTED</div>
+        {% endif %}
+        <div class="stat-label" style="margin-top: 12px;">TWITTER ACCOUNT</div>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">BOT CONTROL</div>
+        <div>
+            {% if not user.twitter_connected %}
+                <div class="alert alert-warning" style="margin-bottom: 12px;">
+                    CONNECT YOUR TWITTER ACCOUNT FIRST
+                </div>
+                <a href="{{ url_for('connect_twitter') }}" class="btn btn-primary" style="width: 100%; text-align: center; display: block;">
+                    CONNECT TWITTER
+                </a>
+            {% else %}
+                <div id="bot-control">
+                    {% if bot_status.running %}
+                        <button class="btn btn-danger" onclick="stopBot()" style="width: 100%;">
+                            STOP BOT
+                        </button>
+                    {% else %}
+                        <button class="btn btn-success" onclick="startBot()" style="width: 100%;">
+                            START BOT
+                        </button>
+                    {% endif %}
+                </div>
+                <div id="bot-status-message" style="margin-top: 12px;"></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">QUICK ACTIONS</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="{{ url_for('tweets') }}" class="btn" style="width: 100%; text-align: left;">MANAGE TWEETS</a>
+            <a href="{{ url_for('keywords') }}" class="btn" style="width: 100%; text-align: left;">MANAGE KEYWORDS</a>
+            <a href="{{ url_for('settings') }}" class="btn" style="width: 100%; text-align: left;">SETTINGS</a>
+            <a href="{{ url_for('stats') }}" class="btn" style="width: 100%; text-align: left;">STATISTICS</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function startBot() {
+    fetch('/api/bot/start', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            const messageDiv = document.getElementById('bot-status-message');
+            if (data.success) {
+                messageDiv.innerHTML = '<div class="alert alert-success">' + data.message.toUpperCase() + '</div>';
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">' + data.error.toUpperCase() + '</div>';
+            }
+        });
+}
+
+function stopBot() {
+    fetch('/api/bot/stop', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            const messageDiv = document.getElementById('bot-status-message');
+            if (data.success) {
+                messageDiv.innerHTML = '<div class="alert alert-success">' + data.message.toUpperCase() + '</div>';
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                messageDiv.innerHTML = '<div class="alert alert-danger">' + data.error.toUpperCase() + '</div>';
+            }
+        });
+}
+</script>
+{% endblock %}

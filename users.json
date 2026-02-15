@@ -1,0 +1,136 @@
+{
+  "default_user": {
+    "user_id": "default_user",
+    "username": "@default_user",
+    "email": null,
+    "twitter_id": null,
+    "created_at": "2026-02-13 21:00:07",
+    "twitter_connected": true,
+    "bot_active": false,
+    "bot_config": {
+      "tweets_per_day": 6,
+      "posting_times": [
+        "16:00",
+        "20:00",
+        "00:00",
+        "04:00",
+        "08:00",
+        "12:00"
+      ],
+      "engagement_interval": 15,
+      "max_replies_per_hour": 5,
+      "keywords": {
+        "betting": [
+          "betting loss Nigeria",
+          "lost money betting",
+          "stop betting",
+          "gambling addiction",
+          "bet9ja losses",
+          "sports betting",
+          "sports betting waste",
+          "betking loss",
+          "sportybet loss",
+          "bet9ja regret"
+        ],
+        "investment": [
+          "how to invest Nigeria",
+          "passive income Nigeria",
+          "investment opportunities",
+          "investment opportunities Nigeria",
+          "where to invest",
+          "where to invest Nigeria",
+          "wealth building",
+          "small money investment"
+        ],
+        "land": [
+          "buy land Lagos",
+          "buy land Abeokuta",
+          "land ownership Nigeria",
+          "affordable land",
+          "affordable land Nigeria",
+          "land investment",
+          "real estate Lagos",
+          "farmland Nigeria",
+          "real estate investment Nigeria",
+          "property investment Nigeria"
+        ],
+        "co_ownership": [
+          "fractional ownership",
+          "fractional ownership Nigeria",
+          "co-ownership property",
+          "shared ownership",
+          "shared ownership real estate",
+          "real estate syndication",
+          "group land purchase"
+        ]
+      }
+    }
+  },
+  "twitter_956001367": {
+    "user_id": "twitter_956001367",
+    "username": "@olugbode_tolu",
+    "email": null,
+    "twitter_id": "956001367",
+    "created_at": "2026-02-14 11:25:19",
+    "twitter_connected": true,
+    "bot_active": false,
+    "bot_config": {
+      "tweets_per_day": 6,
+      "posting_times": [
+        "16:00",
+        "20:00",
+        "00:00",
+        "04:00",
+        "08:00",
+        "12:00"
+      ],
+      "engagement_interval": 15,
+      "max_replies_per_hour": 5,
+      "keywords": {
+        "betting": [
+          "betting loss Nigeria",
+          "lost money betting",
+          "stop betting",
+          "gambling addiction",
+          "bet9ja losses",
+          "sports betting",
+          "sports betting waste",
+          "betking loss",
+          "sportybet loss",
+          "bet9ja regret"
+        ],
+        "investment": [
+          "how to invest Nigeria",
+          "passive income Nigeria",
+          "investment opportunities",
+          "investment opportunities Nigeria",
+          "where to invest",
+          "where to invest Nigeria",
+          "wealth building",
+          "small money investment"
+        ],
+        "land": [
+          "buy land Lagos",
+          "buy land Abeokuta",
+          "land ownership Nigeria",
+          "affordable land",
+          "affordable land Nigeria",
+          "land investment",
+          "real estate Lagos",
+          "farmland Nigeria",
+          "real estate investment Nigeria",
+          "property investment Nigeria"
+        ],
+        "co_ownership": [
+          "fractional ownership",
+          "fractional ownership Nigeria",
+          "co-ownership property",
+          "shared ownership",
+          "shared ownership real estate",
+          "real estate syndication",
+          "group land purchase"
+        ]
+      }
+    }
+  }
+}

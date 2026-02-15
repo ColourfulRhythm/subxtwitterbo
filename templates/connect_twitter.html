@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}CONNECT TWITTER{% endblock %}
+
+{% block content %}
+<h1>CONNECT TWITTER ACCOUNT</h1>
+
+<div class="card">
+    <div class="card-header">CONNECTION METHOD</div>
+    
+    <div style="display: flex; gap: 0; margin-bottom: 16px; border: 4px solid #000000;">
+        <button class="nav-link active" onclick="switchTab('oauth')" style="cursor: pointer; flex: 1;">
+            OAUTH (RECOMMENDED)
+        </button>
+        <button class="nav-link" onclick="switchTab('manual')" style="cursor: pointer; flex: 1;">
+            MANUAL ENTRY
+        </button>
+    </div>
+    
+    <div id="oauth-tab" class="tab-content active">
+        <div class="alert alert-warning" style="margin-bottom: 16px;">
+            SECURE OAUTH AUTHENTICATION - RECOMMENDED METHOD
+        </div>
+        <form method="POST">
+            <input type="hidden" name="method" value="oauth">
+            <button type="submit" class="btn btn-primary">
+                CONNECT WITH TWITTER OAUTH
+            </button>
+        </form>
+    </div>
+    
+    <div id="manual-tab" class="tab-content">
+        <div class="alert alert-warning" style="margin-bottom: 16px;">
+            ENTER YOUR TWITTER API CREDENTIALS MANUALLY. KEEP THEM SECURE.
+        </div>
+        <form method="POST">
+            <input type="hidden" name="method" value="manual">
+            <div style="margin-bottom: 12px;">
+                <label for="api_key" class="form-label">API KEY (CONSUMER KEY)</label>
+                <input type="text" class="form-control" id="api_key" name="api_key" required>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label for="api_secret" class="form-label">API SECRET (CONSUMER SECRET)</label>
+                <input type="password" class="form-control" id="api_secret" name="api_secret" required>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label for="access_token" class="form-label">ACCESS TOKEN</label>
+                <input type="text" class="form-control" id="access_token" name="access_token" required>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label for="access_token_secret" class="form-label">ACCESS TOKEN SECRET</label>
+                <input type="password" class="form-control" id="access_token_secret" name="access_token_secret" required>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label for="bearer_token" class="form-label">BEARER TOKEN</label>
+                <input type="password" class="form-control" id="bearer_token" name="bearer_token" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                SAVE CREDENTIALS
+            </button>
+        </form>
+    </div>
+</div>
+        
+<div class="card" style="margin-top: 16px;">
+    <div class="card-header">HOW TO GET CREDENTIALS</div>
+    <ol style="color: #000000; line-height: 2; padding-left: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase;">
+        <li>GO TO <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank" style="color: #000000; text-decoration: underline;">TWITTER DEVELOPER PORTAL</a></li>
+        <li>CREATE A NEW APP OR SELECT AN EXISTING ONE</li>
+        <li>GO TO "KEYS AND TOKENS" TAB</li>
+        <li>COPY YOUR API KEY, API SECRET, ACCESS TOKEN, ACCESS TOKEN SECRET, AND BEARER TOKEN</li>
+        <li>PASTE THEM IN THE FORM ABOVE</li>
+    </ol>
+</div>
+
+<script>
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+        tab.classList.remove('active');
+    });
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.getElementById(tabName + '-tab').style.display = 'block';
+    document.getElementById(tabName + '-tab').classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

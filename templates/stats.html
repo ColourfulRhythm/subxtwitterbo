@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}STATISTICS{% endblock %}
+
+{% block content %}
+<h1>STATISTICS</h1>
+
+<div class="grid grid-3" style="margin-bottom: 16px;">
+    <div class="stat-card">
+        <div class="stat-number">{{ bot_data.get('total_tweets_posted', 0) }}</div>
+        <div class="stat-label">TOTAL TWEETS POSTED</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">{{ bot_data.get('total_replies_sent', 0) }}</div>
+        <div class="stat-label">TOTAL REPLIES SENT</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">{{ bot_data.get('replied_tweets', [])|length }}</div>
+        <div class="stat-label">TWEETS REPLIED TO</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">DAILY STATISTICS</div>
+    {% if bot_data.get('daily_stats') %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>TWEETS POSTED</th>
+                    <th>REPLIES SENT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, stats in bot_data.daily_stats.items()|sort(reverse=true) %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ stats.get('total_tweets_posted', 0) }}</td>
+                    <td>{{ stats.get('total_replies_sent', 0) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color: #000000; text-align: center; padding: 40px; font-weight: 700; text-transform: uppercase;">NO STATISTICS AVAILABLE YET. START YOUR BOT TO BEGIN TRACKING.</p>
+    {% endif %}
+</div>
+{% endblock %}

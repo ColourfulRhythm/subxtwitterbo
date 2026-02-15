@@ -1,0 +1,46 @@
+# Environment variables (NEVER commit these!)
+.env
+
+# Bot data (contains state and replied tweets)
+bot_data.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Logs
+*.log
+bot.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*~
+
+.encryption_key
+
+# User data and sessions
+users/
+sessions/
+*.enc
+
+# Test files
+test_*.py
+
+# Vercel
+.vercel

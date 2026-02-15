@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}LOGIN{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 60px auto;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <h1 style="margin-bottom: 8px;">LOGIN</h1>
+            <p style="color: #000000; font-size: 12px; font-weight: 700; text-transform: uppercase;">ACCESS YOUR TWITTER BOT</p>
+        </div>
+        
+        <a href="{{ url_for('auth_twitter') }}" class="btn btn-primary" style="width: 100%; text-align: center; display: block;">
+            LOGIN WITH TWITTER
+        </a>
+        
+        <p style="color: #000000; font-size: 11px; text-align: center; margin-top: 16px; font-weight: 700; text-transform: uppercase;">
+            SECURE OAUTH AUTHENTICATION
+        </p>
+    </div>
+</div>
+{% endblock %}
