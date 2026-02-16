@@ -19,6 +19,7 @@ Body: {
 
 import os
 import tweepy
+import traceback
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from datetime import datetime
@@ -74,12 +75,26 @@ def verify_api_key():
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({
-        'status': 'ok',
-        'service': 'Twitter API',
-        'timestamp': datetime.now().isoformat(),
-        'twitter_configured': client is not None
-    }), 200
+    try:
+        return jsonify({
+            'status': 'ok',
+            'service': 'Twitter API',
+            'timestamp': datetime.now().isoformat(),
+            'twitter_configured': client is not None,
+            'env_vars_set': all([
+                bool(API_KEY),
+                bool(API_SECRET),
+                bool(ACCESS_TOKEN),
+                bool(ACCESS_TOKEN_SECRET),
+                bool(BEARER_TOKEN)
+            ])
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'error': str(e),
+            'traceback': traceback.format_exc() if hasattr(traceback, 'format_exc') else 'N/A'
+        }), 500
 
 
 @app.route('/api/post-tweet', methods=['POST'])
