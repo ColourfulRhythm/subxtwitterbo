@@ -8,16 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/health",
-      "dest": "/api/index.py"
-    },
-    {
-      "src": "/api/post-tweet",
-      "dest": "/api/index.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/api/index.py"
+      "dest": "api/index.py"
     }
   ]
 }
