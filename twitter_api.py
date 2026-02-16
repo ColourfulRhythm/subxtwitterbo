@@ -67,7 +67,11 @@ except Exception as e:
 def verify_api_key():
     """Verify API key from request headers"""
     api_key = request.headers.get('X-API-Key') or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not api_key:
+        logger.warning("❌ No API key provided in request headers")
+        return False
     if api_key != API_SECRET_KEY:
+        logger.warning(f"❌ API key mismatch. Provided: {api_key[:10]}... (length: {len(api_key)}), Expected length: {len(API_SECRET_KEY) if API_SECRET_KEY else 0}")
         return False
     return True
 
