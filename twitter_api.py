@@ -125,9 +125,13 @@ def post_tweet():
     
     # Verify API key
     if not verify_api_key():
+        provided_key = request.headers.get('X-API-Key') or request.headers.get('Authorization', '').replace('Bearer ', '')
         return jsonify({
             'success': False,
-            'error': 'Unauthorized. Invalid or missing API key.'
+            'error': 'Unauthorized. Invalid or missing API key.',
+            'hint': 'Check that X-API-Key header matches API_SECRET_KEY in Vercel environment variables',
+            'provided_key_length': len(provided_key) if provided_key else 0,
+            'expected_key_length': len(API_SECRET_KEY) if API_SECRET_KEY and API_SECRET_KEY != 'change-this-to-a-random-string' else 0
         }), 401
     
     # Check if Twitter client is configured
