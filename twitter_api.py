@@ -21,6 +21,7 @@ import os
 import tweepy
 import traceback
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from datetime import datetime
 import logging
@@ -37,6 +38,14 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
+
+# Configure CORS - Allow requests from subxhq.com
+CORS(app, origins=[
+    'https://www.subxhq.com',
+    'https://subxhq.com',
+    'http://localhost:3000',  # For local development
+    'http://localhost:5173',   # For Vite dev server
+], allow_headers=['Content-Type', 'X-API-Key', 'Authorization'], methods=['GET', 'POST', 'OPTIONS'])
 
 # Twitter API credentials (from .env file)
 API_KEY = os.getenv('API_KEY')
@@ -74,6 +83,22 @@ def verify_api_key():
         logger.warning(f"❌ API key mismatch. Provided: {api_key[:10]}... (length: {len(api_key)}), Expected length: {len(API_SECRET_KEY) if API_SECRET_KEY else 0}")
         return False
     return True
+
+
+@app.route('/', methods=['GET'])
+def root():
+    """Root endpoint - API information"""
+    return jsonify({
+        'service': 'Twitter API Service',
+        'status': 'running',
+        'endpoints': {
+            'health': '/health',
+            'api_docs': '/api/post-tweet',
+            'post_tweet': '/api/post-tweet (POST)'
+        },
+        'authentication': 'X-API-Key header required for POST requests',
+        'documentation': 'Visit /api/post-tweet for API documentation'
+    }), 200
 
 
 @app.route('/health', methods=['GET'])
