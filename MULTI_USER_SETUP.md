@@ -60,7 +60,7 @@ The application will start on `http://localhost:5000`
 
 ### 5. Access the Dashboard
 
-1. Open `http://localhost:5000` in your browser
+1. Open ` http://localhost:5000` in your browser
 2. Click "Login with Twitter"
 3. Authorize the application
 4. Connect your Twitter account (OAuth or manual)

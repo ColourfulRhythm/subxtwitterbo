@@ -1072,32 +1072,32 @@ class TwitterBot:
         print(f"🔍 Engagement scans: Every {self.config['engagement_interval']} minutes")
         print(f"💬 Max replies/hour: {self.config['max_replies_per_hour']}")
         print()
-        
-        # Print initial stats
+    
+    # Print initial stats
         self.print_stats()
-        
-        # Check if we missed any scheduled times today and post if needed
-        now = datetime.now()
-        current_time = now.strftime('%H:%M')
-        current_hour = now.hour
-        current_minute = now.minute
-        
-        print(f"⏰ Current time: {current_time}")
-        
-        # Check if any scheduled times have passed today
-        missed_times = []
+    
+    # Check if we missed any scheduled times today and post if needed
+    now = datetime.now()
+    current_time = now.strftime('%H:%M')
+    current_hour = now.hour
+    current_minute = now.minute
+    
+    print(f"⏰ Current time: {current_time}")
+    
+    # Check if any scheduled times have passed today
+    missed_times = []
         for post_time in self.config['posting_times']:
-            hour, minute = map(int, post_time.split(':'))
-            # If scheduled time has passed today, we missed it
-            if hour < current_hour or (hour == current_hour and minute <= current_minute):
-                missed_times.append(post_time)
-        
-        if missed_times:
-            print(f"⚠️  Missed scheduled times today: {missed_times}")
-            print("📝 Posting now to catch up...")
+        hour, minute = map(int, post_time.split(':'))
+        # If scheduled time has passed today, we missed it
+        if hour < current_hour or (hour == current_hour and minute <= current_minute):
+            missed_times.append(post_time)
+    
+    if missed_times:
+        print(f"⚠️  Missed scheduled times today: {missed_times}")
+        print("📝 Posting now to catch up...")
             self.post_scheduled_tweet()
-            print("✅ Caught up!\n")
-        
-        # Run initial engagement scan
-        print("🔍 Running initial engagement scan...")
+        print("✅ Caught up!\n")
+    
+    # Run initial engagement scan
+    print("🔍 Running initial engagement scan...")
         self.search_and_engage()
