@@ -4,17 +4,28 @@ Simple Twitter API Service
 Post tweets from your webapp when users make purchases or other events occur.
 
 Usage:
-1. Set up .env file with Twitter credentials
-2. Set API_SECRET_KEY in .env for authentication
+1. Set up .env file with Twitter credentials (from Twitter Developer Portal):
+   - API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BEARER_TOKEN
+   
+2. Set API_SECRET_KEY in .env (CUSTOM SECRET - NOT from Twitter!):
+   - This is a secret YOU create to protect your API endpoint
+   - Generate one: python3 generate_api_key.py
+   - Use this same key in your webapp when calling the API
+   
 3. Run: python3 twitter_api.py
 4. Call POST /api/post-tweet from your webapp
 
 Example webhook call:
 POST /api/post-tweet
-Headers: X-API-Key: your_secret_key
+Headers: X-API-Key: your_custom_api_secret_key  (NOT a Twitter credential!)
 Body: {
     "tweet": "🎉 New purchase! User just bought land at 2 Seasons!"
 }
+
+IMPORTANT:
+- Twitter credentials (API_KEY, BEARER_TOKEN, etc.) = Authenticate with Twitter
+- API_SECRET_KEY = Custom secret to protect YOUR API endpoint
+- These are COMPLETELY DIFFERENT things!
 """
 
 import os
@@ -54,7 +65,10 @@ ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 BEARER_TOKEN = os.getenv('BEARER_TOKEN')
 
-# API authentication key (set this in .env)
+# API authentication key (CUSTOM SECRET - NOT a Twitter credential!)
+# This is a secret key YOU create to protect your API endpoint
+# It's different from Twitter credentials (API_KEY, BEARER_TOKEN, etc.)
+# Generate one using: python3 generate_api_key.py
 API_SECRET_KEY = os.getenv('API_SECRET_KEY', 'change-this-to-a-random-string')
 
 # Initialize Twitter client
@@ -80,7 +94,7 @@ def verify_api_key():
         logger.warning("❌ No API key provided in request headers")
         return False
     if api_key != API_SECRET_KEY:
-        logger.warning(f"❌ API key mismatch. Provided: {api_key[:10]}... (length: {len(api_key)}), Expected length: {len(API_SECRET_KEY) if API_SECRET_KEY else 0}")
+        logger.warning(f"❌ API key mismatch. Provided key length: {len(api_key)}, Expected key length: {len(API_SECRET_KEY) if API_SECRET_KEY else 0}")
         return False
     return True
 
@@ -154,7 +168,7 @@ def post_tweet():
         return jsonify({
             'success': False,
             'error': 'Unauthorized. Invalid or missing API key.',
-            'hint': 'Check that X-API-Key header matches API_SECRET_KEY in Vercel environment variables',
+            'hint': 'Check that X-API-Key header matches API_SECRET_KEY in Vercel environment variables. Note: API_SECRET_KEY is a custom secret (not a Twitter credential).',
             'provided_key_length': len(provided_key) if provided_key else 0,
             'expected_key_length': len(API_SECRET_KEY) if API_SECRET_KEY and API_SECRET_KEY != 'change-this-to-a-random-string' else 0
         }), 401
